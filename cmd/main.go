@@ -25,7 +25,5 @@ func main() {
 	}()
 
 	consumer := consumer.NewConsumer(cfg.KafkaHost, cfg.KafkaPort)
-	for {
-		consumer.Consume(topic)
-	}
+	consumer.Consume(topic)
 }

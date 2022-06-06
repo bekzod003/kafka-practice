@@ -37,7 +37,7 @@ func (p *Producer) Produce(topic string, message string) {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Message is stored in topic %s", topic)
+	fmt.Printf("Message is stored in topic %s\n", topic)
 }
 
 func configureSarama() *sarama.Config {
