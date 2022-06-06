@@ -27,6 +27,7 @@ func NewConsumer(kafkaHost, kafkaUrl string) *Consumer {
 }
 
 func (c *Consumer) Consume(topic string) (err error) {
+	println("Listening to topic: ", topic)
 	partitionConsumer, err := c.consumer.ConsumePartition(topic, 0, -1)
 	if err != nil {
 		return err

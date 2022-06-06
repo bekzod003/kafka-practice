@@ -9,12 +9,12 @@ import (
 )
 
 type Producer struct {
-	producer sarama.AsyncProducer
+	producer sarama.SyncProducer
 }
 
-func NewProducer(kafkaHost, kafkaUrl string) *Producer {
-	producer, err := sarama.NewAsyncProducer([]string{
-		fmt.Sprintf("%s:%s", kafkaHost, kafkaUrl),
+func NewProducer(kafkaHost, kafkaPort string) *Producer {
+	producer, err := sarama.NewSyncProducer([]string{
+		fmt.Sprintf("%s:%s", kafkaHost, kafkaPort),
 	}, configureSarama())
 
 	if err != nil {
@@ -27,11 +27,17 @@ func NewProducer(kafkaHost, kafkaUrl string) *Producer {
 }
 
 func (p *Producer) Produce(topic string, message string) {
-	p.producer.Input() <- &sarama.ProducerMessage{
+	msg := &sarama.ProducerMessage{
 		Topic: topic,
 		Value: sarama.StringEncoder(message),
 	}
-	println("SUccessfully produced message: ", message, "topic: ", topic)
+
+	_, _, err := p.producer.SendMessage(msg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Message is stored in topic %s", topic)
 }
 
 func configureSarama() *sarama.Config {
