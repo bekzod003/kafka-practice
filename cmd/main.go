@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"time"
 
 	"github.com/bekzod003/kafka-practice/config"
@@ -25,5 +26,7 @@ func main() {
 	}()
 
 	consumer := consumer.NewConsumer(cfg.KafkaHost, cfg.KafkaPort)
-	consumer.Consume(topic)
+	if err := consumer.Consume(topic); err != nil {
+		log.Fatal(err)
+	}
 }
